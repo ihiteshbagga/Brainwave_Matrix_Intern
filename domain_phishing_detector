@@ -1,0 +1,26 @@
+import difflib
+
+def misspelled_domain(domain, legitimate_domains, threshold=0.8):
+    domain = domain.lower()
+    for legit in legitimate_domains:
+        legit = legit.lower()
+        if domain == legit:
+            return False  # exact match, not a misspelling
+        similarity = difflib.SequenceMatcher(None, domain, legit).ratio()
+        if similarity >= threshold:
+            print(f"⚠️ Similar to known domain: {legit} ({similarity:.2f})")  # optional detail
+            return True
+    return False
+
+def main():
+    legitimate_domains = ["google.com", "facebook.com", "amazon.com", "microsoft.com"]
+
+    domain_to_test = input("Enter a domain to check: ").strip()
+
+    if misspelled_domain(domain_to_test, legitimate_domains):
+        print("⚠️ Warning: Suspicious domain detected!")
+    else:
+        print("✅ Domain appears safe.")
+
+if __name__ == "__main__":
+    main()
